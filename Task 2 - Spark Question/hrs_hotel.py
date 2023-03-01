@@ -5,17 +5,6 @@ from pyspark import SparkFiles
 
 spark = SparkSession.Builder().appName('hrs').getOrCreate()
 
-url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv'
-spark.sparkContext.addFile(url)
-hotel_df = spark.read.format('csv')\
-    .option('path', SparkFiles.get("hotels.csv"))\
-    .option('header', True)\
-    .option('InferSchema', True)\
-    .load()
-
-'''First Unit Test Case'''
-UnitTestMethods().df_count_test(hotel_df)
-
 
 class UnitTestMethods(unittest.TestCase):
 
@@ -29,6 +18,18 @@ class UnitTestMethods(unittest.TestCase):
         for row in df.collect():
             self.assertIn(row['with_family_breakfast'], ['Yes', 'No'], 'ERROR')
         print("""Test Case 2 : `with_family_breakfast` column must contains 'Yes' OR 'NO' - PASS""")
+
+
+url = 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv'
+spark.sparkContext.addFile(url)
+hotel_df = spark.read.format('csv')\
+    .option('path', SparkFiles.get("hotels.csv"))\
+    .option('header', True)\
+    .option('InferSchema', True)\
+    .load()
+
+'''First Unit Test Case'''
+UnitTestMethods().df_count_test(hotel_df)
 
 
 def get_filterd_data(df, col_name, val):
